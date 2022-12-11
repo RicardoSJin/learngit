@@ -44,6 +44,8 @@ $ git add file1.txt
 $ git add file2.txt file3.txt
 $ git commit -m "add 3 files."
 
+
+
 ## 添加远程库
 
 ### 本地有 Git 仓库，并且我们已经进行了多次`commit`操作 
@@ -163,5 +165,76 @@ git log --graph --pretty=format:'%Cred%h%Creset - %C(yellow)%d%Creset %s %Cgreen
 
 
 
+## 创建与合并分支
+
+在[版本回退](https://www.liaoxuefeng.com/wiki/896043488029600/897013573512192)里，你已经知道，每次提交，Git都把它们串成一条时间线，这条时间线就是一个分支。截止到目前，只有一条时间线，在Git里，这个分支叫主分支，即`master`分支。`HEAD`严格来说不是指向提交，而是指向`master`，`master`才是指向提交的，所以，`HEAD`指向的就是当前分支。
+
+一开始的时候，`master`分支是一条线，Git用`master`指向最新的提交，再用`HEAD`指向`master`，就能确定当前分支，以及当前分支的提交点：
+
+![](https://www.liaoxuefeng.com/files/attachments/919022325462368/0)
+
+每次提交，`master`分支都会向前移动一步，这样，随着你不断提交，`master`分支的线也越来越长。
+
+当我们创建新的分支，例如`dev`时，Git新建了一个指针叫`dev`，指向`master`相同的提交，再把`HEAD`指向`dev`，就表示当前分支在`dev`上：
+
+![git-br-create](https://www.liaoxuefeng.com/files/attachments/919022363210080/l)
+
+不过，从现在开始，对工作区的修改和提交就是针对`dev`分支了，比如新提交一次后，`dev`指针往前移动一步，而`master`指针不变：
+
+![git-br-dev-fd](https://www.liaoxuefeng.com/files/attachments/919022387118368/l)
+
+假如我们在`dev`上的工作完成了，就可以把`dev`合并到`master`上。Git怎么合并呢？最简单的方法，就是直接把`master`指向`dev`的当前提交，就完成了合并：
+
+![git-br-ff-merge](https://www.liaoxuefeng.com/files/attachments/919022412005504/0)
+
+合并完分支后，甚至可以删除`dev`分支。删除`dev`分支就是把`dev`指针给删掉，删掉后，我们就剩下了一条`master`分支：
+
+![git-br-rm](https://www.liaoxuefeng.com/files/attachments/919022479428512/0)
 
 
+
+### 实战
+
+首先，我们创建并切换到`dev`分支，修改并提交
+
+`dev`分支的工作完成，我们就可以切换回`master`分支 
+
+切换回`master`分支后，再查看一个`readme.txt`文件，刚才添加的内容不见了！因为那个提交是在`dev`分支上，而`master`分支此刻的提交点并没有变：
+
+![git-br-on-master](https://www.liaoxuefeng.com/files/attachments/919022533080576/0)
+
+
+
+现在，我们把`dev`分支的工作成果合并到`master`分支上：
+
+~~~
+$ git merge dev
+Updating 5c86b41..b75b50b
+Fast-forward
+ readme.txt | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+~~~
+
+注意到上面的`Fast-forward`信息，Git告诉我们，这次合并是“快进模式”，也就是直接把`master`指向`dev`的当前提交，所以合并速度非常快。 
+
+合并完成后，就可以放心地删除`dev`分支了 
+
+~~~
+$ git branch -d dev
+~~~
+
+### Git鼓励大量使用分支：
+
+查看分支：`git branch`
+
+创建分支：`git branch <name>`
+
+切换分支：`git checkout <name>`或者`git switch <name>`
+
+ `$ git checkout -b <name>`加上`-b`参数表示创建并切换 
+
+创建+切换分支：`git checkout -b <name>`或者`git switch -c <name>`
+
+合并某分支到当前分支：`git merge <name>`
+
+删除分支：`git branch -d <name>`
