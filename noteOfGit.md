@@ -231,8 +231,9 @@ $ git branch -d dev
 
 切换分支：`git checkout <name>`或者`git switch <name>`
 
-* `$ git checkout -b <name>`加上`-b`参数表示创建并切换
-* `$ git switch -c <name>`加上`-c`参数表示创建并切换
+ `$ git checkout -b <name>`加上`-b`参数表示创建并切换 
+
+ `$ git checkout -c <name>`加上`-c`参数表示创建并切换 
 
 创建+切换分支：`git checkout -b <name>`或者`git switch -c <name>`
 
